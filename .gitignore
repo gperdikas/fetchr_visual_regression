@@ -1,0 +1,17 @@
+# Environment variables and secrets
+.env
+.env.local
+config.json
+secrets.json
+
+# Test outputs and diffs
+/test-data/diffs/
+*.png.diff
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
