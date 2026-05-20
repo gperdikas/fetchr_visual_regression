@@ -3,6 +3,7 @@
 .env.local
 config.json
 secrets.json
+todo.txt
 
 # Test outputs and diffs
 /test-data/diffs/
