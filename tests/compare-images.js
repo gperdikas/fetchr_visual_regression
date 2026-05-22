@@ -28,7 +28,41 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
     const response = await client.messages.create({
       model:"claude-sonnet-4-20250514",
       max_tokens: 1024,
-      messages: [
+        system: `You are a visual regression tester. Your role is to compare between the images sent to you. 
+                There will be visual differences between them. 
+                You must identify this differentiation by issue and categorize it by its severity.
+                
+                Each issue should be characterized by its severity. 
+                The severity can be 'Critical', 'Medium' or 'Minor'. 
+                Critical severity means that an item (e.g. a button, an input box, a text) is missing. 
+                Medium severity is when an item is not missing but there are changes that will surely be 
+                seen by the user but won't be able to break any functionality (e.g. different colours, 
+                different fonts, or differences on an existing text). 
+                Minor severity means that there are some differences on an item but will probably not be 
+                noticed by the user (e.g. a button is 2 px to the right).
+                
+                Your output should have the following format:
+                It has to contain 2 crucial parts. The analysis and the issues.
+                On the analysis part I need a human-readable text which will contain info about the results.
+                Example on analysis: Test completed. 2 Critical, 0 Medium and 5 Minor issues are found.
+                On the issues part I need one line for each issue. Each line should contain 'severity', 'title' and 'description'.
+                Example on an issue: {"severity": "Critical", "title": "Missing Save button", "description":"Save button on item titled as 'Create a user' is missing."}
+                Each distinct finding must be its own item in the issues array. 
+                Each issue must describe exactly one finding. If a single element has multiple problems 
+                (e.g. a button has wrong text and wrong position), each problem is a separate issue in the array.
+
+                A complete response should look like :
+                {
+                  "analysis": "Text as described above",
+                  "issues": [
+                    {"severity": "", "title": "", "description": ""}  
+                  ]
+                }
+
+                Don't give the response as a markdown or a preamble text. Return only valid JSON. The response must be parseable by JSON.parse().
+                `
+              ,
+        messages: [      
         {
           role: "user",
           content: [
@@ -61,7 +95,7 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
             // prompt
             {
               type: "text",
-              text: "Compare these images. Identify all differencies and categorize: CRITICAL (breaks functionality), MEDIUM(visible issue but functional), MINOR(imperceptible issue). List each issue with category."
+              text: `Compare these two images. Please respond in the required JSON format.`
             }
           ]
         }
@@ -99,11 +133,11 @@ async function compareImages(baselinePath, currentPath) {
   const totalPixels = width*height;
   const differencePercentage = (numberDiffPixels/totalPixels)*100;
 
-  // give value 0.1 only to trigger AI testing whatever happens 
-  if (differencePercentage <= 5) {
+  // give value 0.1 only to trigger AI testing whatever happens , 5 for mock
+  if (differencePercentage <= 0.1) {
     console.log(`PASS. ${differencePercentage.toFixed(2)}% of total pixel number fail on pixel matching.`);
   } else {
-    const aiAnalysis = await escalateToAi(baselinePath, currentPath); // add false to run with AI call, delete it to run with mock
+    const aiAnalysis = await escalateToAi(baselinePath, currentPath, false); // add false to run with AI call, delete it to run with mock
     console.log("AI analysis:", aiAnalysis);
     console.log(`AI COMPARISON TRIGGERED. Pixel differentiation is ${differencePercentage}% (${numberDiffPixels}/${totalPixels} pixels failed).`);
   }
