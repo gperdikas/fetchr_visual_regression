@@ -8,8 +8,12 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
   if (useMock) {
     // Return a fake claude response for testing
     return {
-      analysis: "Mock response. Button1 has moved 2px to the right (minor), button1 color differs (mid), button3 missing (critical).",
-      severity: "high"
+      analysis: "Mock response. 1 Critical, 1 Medium and 1 Minor issues found.",
+      issues: [
+        {severity: "Critical", title:"Missing 'Save' button", description: "Save button should be present near the bottom-right corner on the popup."},
+        {severity: "Medium", title:"Wrong colour on 'Cancel' button", description: "'Cancel' button should be gray."},
+        {severity: "Minor", title:"Cancel button 2px off", description: "'Cancel' button is positioned 2px to the left, compared to where it should be."}
+      ]
     }
   } else {
 
@@ -47,10 +51,28 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
                 Example on analysis: Test completed. 2 Critical, 0 Medium and 5 Minor issues are found.
                 On the issues part I need one line for each issue. Each line should contain 'severity', 'title' and 'description'.
                 Example on an issue: {"severity": "Critical", "title": "Missing Save button", "description":"Save button on item titled as 'Create a user' is missing."}
-                Each distinct finding must be its own item in the issues array. 
-                Each issue must describe exactly one finding. If a single element has multiple problems 
-                (e.g. a button has wrong text and wrong position), each problem is a separate issue in the array.
+                Each issue must describe exactly one finding. If a single element has multiple problems, 
+                each problem must be reported as its own separate issue. Findings must never be grouped 
+                into a single issue.
 
+                Examples:
+                1. A button has wrong text AND wrong position. Each of these two problems must be 
+                reported as its own separate issue in the issues array. (Findings must not be grouped 
+                just because they occur on the same element.)
+
+                2. Two different buttons should both contain the text 'Save'. Due to a typo, both 
+                show 'Saave' instead. The fact that both elements have the exact same problem must 
+                not lead to grouping them into a single issue — they remain two separate issues.
+
+                3. A new paragraph and a new button have both been added to the same section of the page. 
+                Even though they appear together and were likely added as part of the same change, 
+                they are two distinct elements with two distinct findings — they must be reported as two separate issues.
+
+                4. A paragraph contains several sentences and many words. The paragraph as a whole is one new 
+                element, not a collection of new elements (words or sentences). This counts as one issue, not multiple. 
+                The internal complexity of a single element does not split it into multiple issues.
+
+                
                 A complete response should look like :
                 {
                   "analysis": "Text as described above",
@@ -104,10 +126,8 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
 
     // Extract and return Claude's answer
     const analysisText = response.content[0].text;
-    return {
-      analysis: analysisText,
-      severity: "unknown"
-    }
+    const result = JSON.parse(analysisText);
+    return result;
   } 
 }
 
