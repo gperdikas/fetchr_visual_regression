@@ -100,13 +100,15 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
                 The severity can be 'Critical', 'Medium' or 'Minor'. 
 
                 - Critical severity : 
-                --  Critical severity means that an item is missing.
+                --  Critical severity means that application's functionality is broken. This could happen when : 1. an 
+                element is missing, 2. an element exists when it shouldn't, 3. an element is changed.
                 - Medium severity :
-                -- Medium severity is when an item is not missing but there are changes that will surely be seen 
-                by the user but won't be able to break any functionality.
+                -- Medium severity means that application's functionality is not broken, but : 1. an element is missing, 
+                2. an element exists when it shouldn't, 3. an element is changed. The difference can be noticed by a human user. 
                 - Minor severity :
-                -- Minor severity means that there are some differences on an item but will probably not be noticed 
-                by the user.
+                -- Minor severity means that application's functionality is not broken, but : 1. an element is missing, 
+                2. an element exists when it shouldn't, 3. an element is changed. The difference cannot be noticed easily by a 
+                human user.
 
              ## Examples
                 - Critical severity :
@@ -114,12 +116,23 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
                 continue.
                 -- A text that is missing and should be there because it contains crucial info for the user, for example 
                 instructions for a valid password.
+                -- An input box is duplicated. User experience will be broken. Also if user adds value on both, an error 
+                might occur.
+                -- A button might be misplaced and cover another button and make it unclickable.
+
                 - Medium severity
-                -- The background color of a button.
-                -- The specific font of a text element (bold, italics, font color, etc.).
-                -- Small differences in a text. The majority of the text is correct but some elements (letters, words) differ.
+                -- A currency sign might not be shown next to a value input box
+                -- A non functional icon might not be shown
+                -- The specific font of a text element (bold, italics, font color, etc.) is different.
+                -- Differences in a text. A sentence or more is missing or differ.
+                -- A button has total different colour.
+
                 - Minor severity
                 -- An element has the wrong position, on the level of a few pixels.
+                -- A button's colour is slightly different
+                -- Differences in a text. The majority of the text is correct but some elements (letters or words level) 
+                are missing or differ. 
+                -- A menu item that has both a label and an icon, is missing one of them.
 
              ## Output format
                 Your output should have the following format:
@@ -143,7 +156,7 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
                 reported as its own separate issue. Findings must never be grouped into a single issue.
                 Examples:
                 1. A button has wrong text AND wrong position. Each of these two problems must be 
-                reported as its own separate issue in the issues array. (Findings must not be grouped just because they occur 
+                reported as its own separate issue in the issues array. (Findings must not be grouped just because they occur
                 on the same element.)
                 2. Two different buttons should both contain the text 'Save'. Due to a typo, both show 'Saave' instead. The 
                 fact that both elements have the exact same problem must not lead to grouping them into a single issue — they 
