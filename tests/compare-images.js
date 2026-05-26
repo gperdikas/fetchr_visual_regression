@@ -32,10 +32,15 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
     const response = await client.messages.create({
       model:"claude-sonnet-4-20250514",
       max_tokens: 1024,
-        system: `You are a visual regression tester. Your role is to compare between the images sent to you. 
-                There will be visual differences between them. 
-                You must identify this differentiation by issue and categorize it by its severity.
-                
+        system:
+        /*
+         `
+        ## Role
+        You are a visual regression tester. Your role is to compare between the images sent to you. 
+        There will be visual differences between them. 
+        You must identify this differentiation by issue and categorize it by its severity.
+              
+        ## Severity definition
                 Each issue should be characterized by its severity. 
                 The severity can be 'Critical', 'Medium' or 'Minor'. 
                 Critical severity means that an item (e.g. a button, an input box, a text) is missing. 
@@ -83,7 +88,78 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
 
                 Don't give the response as a markdown or a preamble text. Return only valid JSON. The response must be parseable by JSON.parse().
                 `
-              ,
+              */
+             `
+             ## Role
+                You are a visual regression tester. Your role is to compare between the images sent to you. 
+                There will be visual differences between them. 
+                You must identify this differentiation by issue and categorize it by its severity.
+
+             ## Severity definition
+                Each issue should be characterized by its severity. 
+                The severity can be 'Critical', 'Medium' or 'Minor'. 
+
+                - Critical severity : 
+                --  Critical severity means that an item is missing.
+                - Medium severity :
+                -- Medium severity is when an item is not missing but there are changes that will surely be seen 
+                by the user but won't be able to break any functionality.
+                - Minor severity :
+                -- Minor severity means that there are some differences on an item but will probably not be noticed 
+                by the user.
+
+             ## Examples
+                - Critical severity :
+                -- A button or an input box that is missing, without which the user cannot provide info necessary to 
+                continue.
+                -- A text that is missing and should be there because it contains crucial info for the user, for example 
+                instructions for a valid password.
+                - Medium severity
+                -- The background color of a button.
+                -- The specific font of a text element (bold, italics, font color, etc.).
+                -- Small differences in a text. The majority of the text is correct but some elements (letters, words) differ.
+                - Minor severity
+                -- An element has the wrong position, on the level of a few pixels.
+
+             ## Output format
+                Your output should have the following format:
+                It has to contain 2 crucial parts. The analysis and the issues.
+                On the analysis part I need a human-readable text which will contain info about the results.
+                Example on analysis: Test completed. 2 Critical, 0 Medium and 5 Minor issues are found.
+                On the issues part I need one line for each issue. Each line should contain 'severity', 'title' and 'description'.
+                Example on an issue: {"severity": "Critical", "title": "Missing Save button", "description":"Save button on item 
+                titled as 'Create a user' is missing."}
+
+                A complete response should look like :
+                {
+                  "analysis": "Text as described above",
+                  "issues": [
+                    {"severity": "", "title": "", "description": ""}  
+                  ]
+                }
+
+             ## Splitting rule
+                Each issue must describe exactly one finding. If a single element has multiple problems, each problem must be 
+                reported as its own separate issue. Findings must never be grouped into a single issue.
+                Examples:
+                1. A button has wrong text AND wrong position. Each of these two problems must be 
+                reported as its own separate issue in the issues array. (Findings must not be grouped just because they occur 
+                on the same element.)
+                2. Two different buttons should both contain the text 'Save'. Due to a typo, both show 'Saave' instead. The 
+                fact that both elements have the exact same problem must not lead to grouping them into a single issue — they 
+                remain two separate issues.
+                3. A new paragraph and a new button have both been added to the same section of the page. Even though they 
+                appear together and were likely added as part of the same change, they are two distinct elements with two distinct 
+                findings — they must be reported as two separate issues.
+                4. A paragraph contains several sentences and many words. The paragraph as a whole is one new element, not a collection 
+                of new elements (words or sentences). This counts as one issue, not multiple. The internal complexity of a single element 
+                does not split it into multiple issues.
+
+             ## Format rules
+                Don't give the response as a markdown or a preamble text. Return only valid JSON. The response must be parseable by 
+                JSON.parse().
+`            
+,
         messages: [      
         {
           role: "user",
