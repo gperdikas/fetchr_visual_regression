@@ -1,5 +1,5 @@
 const {test, expect} = require('@playwright/test');
-const {calculateRiskLevel} = require ('./riskLevel');
+const {calculateRiskLevel} = require ('../src/riskLevel');
 const {makeIssues} = require('./test-helpers/make-issues');
 
 //High severity tests
