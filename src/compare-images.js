@@ -185,20 +185,27 @@ async function compareImages(baselinePath, currentPath) {
   // Calculate percentage difference
   const totalPixels = width*height;
   const differencePercentage = (numberDiffPixels/totalPixels)*100;
+  let pixelCheckPassed;
+  let escalatedToAi; 
+  let issues = [];
 
   // give value 0.1 only to trigger AI testing whatever happens , 5 for mock
   if (differencePercentage <= 0.1) {
-    console.log(`PASS. ${differencePercentage.toFixed(2)}% of total pixel number fail on pixel matching.`);
+    pixelCheckPassed = true;
+    escalatedToAi = false;
+    issues = [];
+    // console.log(`PASS. ${differencePercentage.toFixed(2)}% of total pixel number fail on pixel matching.`);
   } else {
     const aiAnalysis = await escalateToAi(baselinePath, currentPath); // add false to run with AI call, delete it to run with mock
-    console.log("AI analysis:", aiAnalysis);
-    console.log(`AI COMPARISON TRIGGERED. Pixel differentiation is ${differencePercentage}% (${numberDiffPixels}/${totalPixels} pixels failed).`);
+    pixelCheckPassed = false;
+    escalatedToAi = true;
+    issues = aiAnalysis.issues;
+    // console.log("AI analysis:", aiAnalysis);
+    // console.log(`AI COMPARISON TRIGGERED. Pixel differentiation is ${differencePercentage}% (${numberDiffPixels}/${totalPixels} pixels failed).`);
   }
+  return {differencePercentage, pixelCheckPassed, escalatedToAi, issues};
 }
 
-// Test it
-const result = compareImages(
-  'test-data/designs/dummy-baseline.png',
-  'test-data/screenshots/dummy-current.png'
-);
+module.exports = {compareImages};
+
 
