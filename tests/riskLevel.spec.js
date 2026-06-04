@@ -88,3 +88,9 @@ test('Less than 10 minor issues (1) return Low (risk level)', () => {
   const risk = calculateRiskLevel(issues);
   expect(risk).toBe("LOW");
 });
+
+test('Zero issues return No risk level', () => {
+  const issues = makeIssues(0, 0, 0);
+  const risk = calculateRiskLevel(issues);
+  expect(risk).toBe("NO_RISK");
+});

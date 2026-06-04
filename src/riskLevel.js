@@ -21,6 +21,7 @@ function calculateRiskLevel(issues) {
   if (countMajor >=1) return "MEDIUM";
   if (countMinor >= 50) return "HIGH";
   if (countMinor >= 10) return "MEDIUM";
+  if (countMinor === 0) return "NO_RISK";
   return "LOW";
 }
 module.exports = {calculateRiskLevel};
