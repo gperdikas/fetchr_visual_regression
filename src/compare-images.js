@@ -196,7 +196,7 @@ async function compareImages(baselinePath, currentPath) {
     issues = [];
     // console.log(`PASS. ${differencePercentage.toFixed(2)}% of total pixel number fail on pixel matching.`);
   } else {
-    const aiAnalysis = await escalateToAi(baselinePath, currentPath); // add false to run with AI call, delete it to run with mock
+    const aiAnalysis = await escalateToAi(baselinePath, currentPath, false); // add false to run with AI call, delete it to run with mock
     pixelCheckPassed = false;
     escalatedToAi = true;
     issues = aiAnalysis.issues;
