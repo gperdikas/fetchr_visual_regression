@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title> Login </title>
+  </head>
+  <body>
+    <style>
+      #login-form {
+        border: 1px solid black;
+        background-color: beige;
+        width: 400px;
+        border-radius: 10px;
+        padding-top: 0px;
+        overflow: hidden;
+      }
+      #title {
+        Background-color: blue;
+        color: white;
+        margin-top: 0px;
+        padding-left: 10px;
+      }
+      #email-row {
+        display: flex;
+        align-items: center;
+        label {width: 100px;}
+        padding: 10px;
+      }
+      #password-row {
+        display: flex;
+        align-items: center;
+        label {width: 100px;}
+        padding: 10px;
+      }
+      #email-inputbox {
+        border: 1px  solid black;
+        background-color: white;
+      }
+      #psw-inputbox {
+        border: 1px solid black;
+        background-color: white;
+      }
+      #btn-row {
+        display: flex;
+        justify-content: right;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-right: 20px;
+        gap: 10px;
+      }
+      #cancel-btn {
+        border: 1px solid black;
+        background-color: lightgray;
+      }
+      #login-btn {
+        border: 1px solid black;
+        background-color: lightblue;
+      }
+    </style>
+
+    <div id="login-form">
+      <div> 
+        <h2 id="title"> Login </h2> 
+      </div>
+      <div id="email-row"> 
+        <label>Email address:</label> 
+        <input id="email-inputbox"> 
+      </div>
+      <div id="password-row"> 
+        <label>Password:</label> 
+        <input id="psw-inputbox"> 
+      </div>
+      <div id="btn-row"> 
+        <button id="cancel-btn"> Cancel </button> 
+        <button id="login-btn"> Log in </button> 
+      </div>
+    </div>
+  </body>
+</html>
+

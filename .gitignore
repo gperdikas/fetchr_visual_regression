@@ -4,6 +4,7 @@
 config.json
 secrets.json
 todo.txt
+scratch/
 
 # Test outputs and diffs
 /test-data/diffs/
@@ -16,3 +17,4 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
