@@ -13,6 +13,7 @@ async function takeScreenshot(url, locator, savePath){
     await item.screenshot({path: buildPath});
 
     await browser.close();
+    return buildPath;
 }
-
-takeScreenshot('http://localhost:3000/page1', '#login-form', 'test-data/screenshots/');
+module.exports = {takeScreenshot};
+// takeScreenshot('http://localhost:3000/page1', '#login-form', 'test-data/screenshots/');
