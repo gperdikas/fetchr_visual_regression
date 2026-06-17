@@ -1,7 +1,6 @@
 function makeOneIssue(severity, title, description) {
-  let oneIssue = {};
-
-  return issue;
+    const oneIssue = {severity: severity, title: title, description: description}
+  return oneIssue;
 }
 module.exports = {makeOneIssue};
 
