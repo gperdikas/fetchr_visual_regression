@@ -21,14 +21,37 @@ test('Severity on AI analysis response is ""', () => {
 });
 
 // title is ""
+test('Title on AI analysis response is ""', () => {
+  const issueArray = [makeOneIssue("Major", "", "Save button is missing")];
+  expect( () => validateIssues(issueArray)).toThrow("Given title is empty");
+});
 
 // description is ""
+test('Description on AI analysis response is ""', () => {
+  const issueArray = [makeOneIssue("Major", "Missing button", "")];
+  expect( () => validateIssues(issueArray)).toThrow("Given description is empty");
+});
 
 // severity undefined
+test('Severity on AI analysis response is undefined', () => {
+  const issueArray = [makeOneIssue(undefined, "Missing button", "Save button is missing")];
+  expect( () => validateIssues(issueArray)).toThrow("Given severity is undefined");
+});
 
 // title undefined
+test('Title on AI analysis response is undefined', () => {
+  const issueArray = [makeOneIssue("Major", undefined, "Save button is missing")];
+  expect( () => validateIssues(issueArray)).toThrow("Given title is undefined");
+});
 
 // description undefined
-
+test('Description on AI analysis response is undefined', () => {
+  const issueArray = [makeOneIssue("Major", "Missing button", undefined)];
+  expect( () => validateIssues(issueArray)).toThrow("Given description is undefined");
+});
 
 // severity is medium
+test('Severity value is not as should', () => {
+  const issueArray = [makeOneIssue("Red code", "Missing button", "Save button is missing")];
+  expect( () => validateIssues(issueArray)).toThrow("Invalid severity. Must be 'Critical', 'Major' or 'Minor'");
+});
