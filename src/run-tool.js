@@ -23,7 +23,7 @@ async function runTool() {
   }
 
 // return something that will be translated to a print msg, or print msg
-const finalResult = { risk: riskResult, issues: result.issues, differencePercentage: result.differencePercentage };
+const finalResult = { risk: riskResult, analysis: result.analysis, issues: result.issues, differencePercentage: result.differencePercentage };
 console.log(finalResult);
 }
 runTool();

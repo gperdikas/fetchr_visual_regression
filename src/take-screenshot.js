@@ -1,10 +1,10 @@
 const {chromium} = require('playwright');
-
+const {toolConfiguration} = require('../tool-config');
 async function takeScreenshot(url, locator, savePath){
 
     // open browser & page
     const browser = await chromium.launch();
-    const page = await browser.newPage({viewport: {width:1920, height:1080}});
+    const page = await browser.newPage({viewport: toolConfiguration.viewport});
     await page.goto(url);
 
     const buildPath = savePath + locator.replaceAll("#","") + ".png";

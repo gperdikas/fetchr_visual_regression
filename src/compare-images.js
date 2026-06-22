@@ -1,6 +1,8 @@
 require('dotenv').config();
+
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
+const {toolConfiguration} = require('../tool-config');
 const PNG = require('pngjs').PNG;
 const pixelmatch = require('pixelmatch').default;
 
@@ -10,9 +12,9 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
     return {
       analysis: "Mock response. 1 Critical, 1 Major and 1 Minor issues found.",
       issues: [
-        {severity: "Critical", title:"Missing 'Save' button", description: "Save button should be present near the bottom-right corner on the popup."},
-        {severity: "Major", title:"Wrong colour on 'Cancel' button", description: "'Cancel' button should be gray."},
-        {severity: "Minor", title:"Cancel button 2px off", description: "'Cancel' button is positioned 2px to the left, compared to where it should be."}
+        {severity: "Critical", title:"[MOCK] Missing 'Save' button", description: "Save button should be present near the bottom-right corner on the popup."},
+        {severity: "Major", title:"[MOCK] Wrong colour on 'Cancel' button", description: "'Cancel' button should be gray."},
+        {severity: "Minor", title:"[MOCK] Cancel button 2px off", description: "'Cancel' button is positioned 2px to the left, compared to where it should be."}
       ]
     }
   } else {
@@ -30,7 +32,7 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
 
     // Send request to Claude
     const response = await client.messages.create({
-      model:"claude-sonnet-4-6",
+      model: toolConfiguration.model,
       max_tokens: 1024,
         system:
              `
@@ -180,7 +182,7 @@ async function compareImages(baselinePath, currentPath) {
     diff.data,
     width,
     height,
-    {threshold: 0.05}
+    {threshold: toolConfiguration.pixelMatchThreshold}
   )
   // Calculate percentage difference
   const totalPixels = width*height;
@@ -188,22 +190,24 @@ async function compareImages(baselinePath, currentPath) {
   let pixelCheckPassed;
   let escalatedToAi; 
   let issues = [];
+  let analysis = "";
 
   // give value 0.1 only to trigger AI testing whatever happens , 5 for mock
-  if (differencePercentage <= 0.1) {
+  if (differencePercentage <= toolConfiguration.escalationThreshold) {
     pixelCheckPassed = true;
     escalatedToAi = false;
     issues = [];
     // console.log(`PASS. ${differencePercentage.toFixed(2)}% of total pixel number fail on pixel matching.`);
   } else {
-    const aiAnalysis = await escalateToAi(baselinePath, currentPath, false); // add false to run with AI call, delete it to run with mock
+    const aiAnalysis = await escalateToAi(baselinePath, currentPath, toolConfiguration.mockFlag); 
     pixelCheckPassed = false;
     escalatedToAi = true;
     issues = aiAnalysis.issues;
+    analysis = aiAnalysis.analysis;
     // console.log("AI analysis:", aiAnalysis);
     // console.log(`AI COMPARISON TRIGGERED. Pixel differentiation is ${differencePercentage}% (${numberDiffPixels}/${totalPixels} pixels failed).`);
   }
-  return {differencePercentage, pixelCheckPassed, escalatedToAi, issues};
+  return {differencePercentage, pixelCheckPassed, escalatedToAi, issues, analysis};
 }
 
 module.exports = {compareImages};
