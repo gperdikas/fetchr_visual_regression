@@ -16,4 +16,3 @@ async function takeScreenshot(url, locator, savePath){
     return buildPath;
 }
 module.exports = {takeScreenshot};
-// takeScreenshot('http://localhost:3000/page1', '#login-form', 'test-data/screenshots/');

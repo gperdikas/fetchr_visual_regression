@@ -11,10 +11,6 @@ async function runTool() {
   const locator = "#login-form";
   const savePath = "test-data/screenshots/";
   const currentPath = await takeScreenshot(url, locator, savePath);
-// call here take-screenshot to craete the currentPath (pic to be tested)
-// maybe on each test's object add the baselinePath (pic saved as the basis to check on)
-
-
   const result = await compareImages(baselinePath, currentPath);
   if (result.escalatedToAi === true) {
     riskResult = calculateRiskLevel(result.issues);
@@ -22,9 +18,7 @@ async function runTool() {
     riskResult = "NO_ISSUES";
   }
 
-// return something that will be translated to a print msg, or print msg
 const finalResult = { risk: riskResult, analysis: result.analysis, issues: result.issues, differencePercentage: result.differencePercentage };
 console.log(finalResult);
 }
 runTool();
-//      return {differencePercentage, pixelCheckPassed, escalatedToAi, issues};

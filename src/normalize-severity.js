@@ -16,10 +16,5 @@ function normalizeSeverities () {
   
 }
 
-
-
-
-
-
 module.exports = {normalizeSeverities}
 module.exports = {normalizeOneSeverity};

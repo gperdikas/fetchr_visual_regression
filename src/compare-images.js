@@ -167,11 +167,13 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
 }
 
 async function compareImages(baselinePath, currentPath) {
+ 
   // Load both images
   const baselineData = fs.readFileSync(baselinePath);
   const baselineImg = PNG.sync.read(baselineData);
   const currentData = fs.readFileSync(currentPath);
   const currentImg = PNG.sync.read(currentData);
+ 
   // Compare them with pixelmatch
   const width = baselineImg.width;
   const height = baselineImg.height;
@@ -184,6 +186,7 @@ async function compareImages(baselinePath, currentPath) {
     height,
     {threshold: toolConfiguration.pixelMatchThreshold}
   )
+ 
   // Calculate percentage difference
   const totalPixels = width*height;
   const differencePercentage = (numberDiffPixels/totalPixels)*100;
@@ -192,20 +195,16 @@ async function compareImages(baselinePath, currentPath) {
   let issues = [];
   let analysis = "";
 
-  // give value 0.1 only to trigger AI testing whatever happens , 5 for mock
   if (differencePercentage <= toolConfiguration.escalationThreshold) {
     pixelCheckPassed = true;
     escalatedToAi = false;
     issues = [];
-    // console.log(`PASS. ${differencePercentage.toFixed(2)}% of total pixel number fail on pixel matching.`);
   } else {
     const aiAnalysis = await escalateToAi(baselinePath, currentPath, toolConfiguration.mockFlag); 
     pixelCheckPassed = false;
     escalatedToAi = true;
     issues = aiAnalysis.issues;
     analysis = aiAnalysis.analysis;
-    // console.log("AI analysis:", aiAnalysis);
-    // console.log(`AI COMPARISON TRIGGERED. Pixel differentiation is ${differencePercentage}% (${numberDiffPixels}/${totalPixels} pixels failed).`);
   }
   return {differencePercentage, pixelCheckPassed, escalatedToAi, issues, analysis};
 }

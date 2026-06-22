@@ -61,13 +61,13 @@ copy .env.example .env
 FetchR needs two things running: a local server hosting the test pages, and the tool itself.
 
 **1. Start the test page server** (one terminal):
-​```bash
+​```
 npx serve test-data/test-pages
 ​```
 This serves the bundled example pages at http://localhost:3000.
 
 **2. Run the tool** (a second terminal):
-​```bash
+​```
 node src/run-tool.js
 ​```
 
