@@ -28,7 +28,9 @@ function validateIssues (issueArray) {
       throw new Error("Given description is undefined");
     }
 
-    if (issueArray[i].severity !== 'Critical' || 'Major' || 'Minor') {
+    if (issueArray[i].severity !== 'Critical' && 
+       issueArray[i].severity !== 'Major' && 
+       issueArray[i].severity !== 'Minor') {
       throw new Error("Invalid severity. Must be 'Critical', 'Major' or 'Minor'");
     }
 

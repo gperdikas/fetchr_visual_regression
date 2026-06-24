@@ -55,3 +55,9 @@ test('Severity value is not as should', () => {
   const issueArray = [makeOneIssue("Red code", "Missing button", "Save button is missing")];
   expect( () => validateIssues(issueArray)).toThrow("Invalid severity. Must be 'Critical', 'Major' or 'Minor'");
 });
+
+// severity has proper value
+test('Severity value is proper', () => {
+  const issueArray = [makeOneIssue("Major", "Missing button", "Save button is missing")];
+  expect(() => validateIssues(issueArray)).not.toThrow();
+});

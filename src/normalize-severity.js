@@ -11,10 +11,17 @@ function normalizeOneSeverity (severityValue) {
   }
 }
 
-
-function normalizeSeverities () {
-  
+function normalizeSeverities (issuesArray) {
+  const newArray = [];
+  for (let i=0; i<issuesArray.length; i++){
+    const newSeverity = normalizeOneSeverity(issuesArray[i].severity);
+    newArray.push({
+      severity: newSeverity,
+      title: issuesArray[i].title,
+      description: issuesArray[i].description 
+    });
+  }
+  return newArray;
 }
 
-module.exports = {normalizeSeverities}
-module.exports = {normalizeOneSeverity};
+module.exports = {normalizeSeverities, normalizeOneSeverity};
