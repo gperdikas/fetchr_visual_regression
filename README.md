@@ -16,12 +16,13 @@ It scans every case and only calls AI when there's something real to judge.
 - Compares the two screenshots referring to the same item using deterministic code (scanning by pixel)
 - Escalates to AI judgement if pixel difference is over the given threshold
 - Receives a structured JSON array of issues from the AI
-- Validates issues
+- Normalizes severity casing to canonical form (Critical/Major/Minor) withour altering meaning.
+- Validates each issue's structure and severity, rejecting malformed AI output before risk calculation.
 - Calculates risk level, given issues' severity, as judged by AI
 
 
 ## How It Works
-Take screenshots -> Compare -> AI analysis (if needed) -> Validate results -> Risk calculation
+Take screenshots -> Compare -> AI analysis (if needed) -> Normalize results -> Validate results -> Risk calculation
 The baseline currently comes from a known good reference image (e.g. the staging environment).
 
 
@@ -84,7 +85,6 @@ Running FetchR against a page where the header color changed from blue to black.
 ## Roadmap
 
 ### v1.0.0 (next)
-- Wire severity normalization into the pipeline (normalize array before validation)
 - Data-driven multi-case testing — run against a list of pages instead of one hardcoded case
 - User-supplied URLs: point the tool at your own staging and target environments
 - Clearer errors when the test server isn't serving the expected page
