@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title> page2 </title>
+  </head>
+  <body>
+    <style>
+      #edit-user-form {
+        border: 1px solid black;
+        background-color: beige;
+        width: 400px;
+        border-radius: 10px;
+        padding-top: 0px;
+        overflow: hidden;
+      }
+
+      #edit-user-title {
+        Background-color: rgb(73, 109, 176);
+        color: white;
+        margin-top: 0px;
+        padding-left: 10px;
+      }
+
+      #edit-user-first-row,
+      #edit-user-last-row,
+      #edit-user-name-row,
+      #edit-user-email-address-row,
+      #edit-user-gender-row {
+        display: flex;
+        align-items: center;
+        label {width: 100px;}
+        padding: 10px;
+      }
+   
+      #edit-user-email-address-inputbox,
+      #edit-user-name-inputbox {
+        border: 1px  solid black;
+        background-color: white;
+        font-family:'Times New Roman', Times, serif;
+      }
+
+      #edit-user-gender {
+        border: 1px  solid black;
+        background-color: white;
+      }
+    
+      #edit-user-btn-row {
+        display: flex;
+        justify-content: right;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-right: 20px;
+        gap: 10px;
+      }
+
+      #edit-user-cancel-btn {
+        border: 1px solid black;
+        background-color: rgb(188, 134, 134);
+      }
+
+      #edit-user-save-btn {
+        border: 1px solid black;
+        background-color: lightblue;
+      }
+    </style>
+
+
+    <div id="edit-user-form">
+      
+      <div>
+        <h2 id="edit-user-title"> Edit user </h2>
+      </div>
+      
+      <div id="edit-user-first-row"> 
+        <label>First name</label>
+        <label>Firstname</label>
+      </div>
+
+      <div id="edit-user-last-row"> 
+        <label>Last name</label>
+        <label>Lastname</label>
+      </div>
+      
+      <div id="edit-user-name-row"> 
+        <label>User name</label>
+        <input id="edit-user-name-inputbox">
+      </div>
+
+      <div id="edit-user-email-address-row"> 
+        <label>Email address</label>
+        <input id="edit-user-email-address-inputbox">
+      </div>
+
+      <div id="edit-user-gender-row">
+        <label>Gender</label>
+        <select id="edit-user-gender">
+          <option value="other">Other</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div id="edit-user-btn-row"> 
+        <button id="edit-user-cancel-btn"> Cancel </button> 
+        <button id="edit-user-save-btn"> Save changes </button> 
+      </div>
+
+    </div>
+  </body>
+</html>
+
