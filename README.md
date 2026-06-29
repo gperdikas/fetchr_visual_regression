@@ -12,6 +12,7 @@ It scans every case and only calls AI when there's something real to judge.
 
 ## Features
 - Takes screenshots of given items on given pages
+- Generates baseline images using the same capture path as current screenshots, guaranteeing pixel-comparable references
 - Saves screenshots accordingly (baseline or current-state)
 - Compares the two screenshots referring to the same item using deterministic code (scanning by pixel)
 - Escalates to AI judgement if pixel difference is over the given threshold
@@ -23,7 +24,7 @@ It scans every case and only calls AI when there's something real to judge.
 
 ## How It Works
 Take screenshots -> Compare -> AI analysis (if needed) -> Normalize results -> Validate results -> Risk calculation
-The baseline currently comes from a known good reference image (e.g. the staging environment).
+Baselines are generated with the same screenshot function the tool uses for current shots (via src/create-baseline.js), so the two are always captured identically and comparable. Baselines are saved as test-data/designs/baseline-<item>.png.
 
 
 ## Tech Stack
@@ -67,9 +68,9 @@ npx serve test-data/test-pages
 ​```
 This serves the bundled example pages at http://localhost:3000.
 
-**2. Run the tool** (a second terminal):
+**2. Run the test suite** (a second terminal):
 ​```
-node src/run-tool.js
+npx playwright test
 ​```
 
 The tool screenshots the example page, compares it against the baseline, and — if the difference is large enough — escalates to the AI for a severity verdict and an overall risk score.
