@@ -16,8 +16,8 @@
         overflow: hidden;
       }
 
-      #login-title
-      {
+      #login-title,
+      #create-user-title {
         Background-color: rgb(73, 109, 176);
         color: white;
         margin-top: 0px;
@@ -41,8 +41,8 @@
       #login-psw-inputbox,
       #create-user-first-inputbox,
       #create-user-last-inputbox,
-      #create-user-name-inputbox
-      {
+      #create-user-name-inputbox,
+      #create-user-email-address-inputbox {
         border: 1px  solid black;
         background-color: white;
         font-family: 'Times New Roman', Times, serif';  
@@ -63,10 +63,14 @@
         gap: 10px;
       }
 
-      #login-cancel-btn,
-      #create-user-cancel-btn {
+      #login-cancel-btn {
         border: 1px solid black;
         background-color: rgb(188, 134, 134);
+      }
+
+      #create-user-cancel-btn {
+        border: 1px solid black;
+        background-color: rgb(189, 27, 27);
       }
 
       #login-btn,
@@ -107,7 +111,7 @@
       </div>
       
       <div id="create-user-first-row"> 
-        <label>First name</label>
+        <label>Firstname</label>
         <input id="create-user-first-inputbox">
       </div>
 
@@ -131,7 +135,7 @@
         <select id="create-user-gender">
           <option value="other">Other</option>
           <option value="male">Male</option>
-          <option value="female">Fmale</option>
+          <option value="female">Female</option>
         </select>
       </div>
 

@@ -152,8 +152,8 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
             // prompt
             {
               type: "text",
-              text: `Compare these two images. Please respond in the required JSON format.`
-            }
+              text: `Compare these two form images. List every single visual difference — labels, fields, dropdowns, button colors, sizes.
+                     Respond with raw JSON only.`            }
           ]
         }
       ]
@@ -161,7 +161,8 @@ async function escalateToAi(baselinePath, currentPath, useMock = true) {
 
     // Extract and return Claude's answer
     const analysisText = response.content[0].text;
-    const result = JSON.parse(analysisText);
+    const cleanedText = analysisText.replace(/```json/g, '').replace(/```/g, '').trim();
+    const result = JSON.parse(cleanedText);
     return result;
   } 
 }

@@ -3,12 +3,12 @@ const {compareImages} = require('./compare-images.js');
 const {calculateRiskLevel} = require('./risk-level.js');
 const {normalizeSeverities} = require('./normalize-severity.js');
 const {validateIssues} = require('./response-validator.js');
-// const baselinePath = "test-data/designs/login-form-baseline.png";
-// const currentPath = "test-data/screenshots/dummy-current.png";
+// const baselinePath = "test-data/designs/baseline-craete-user-form.png";
+// const currentPath = "test-data/screenshots/create-user-form.png";
 let riskResult ;
 
-async function runTool(url, locator, savePath, baselinePath) {
-  const currentPath = await takeScreenshot(url, locator, savePath);
+async function runTool(url, locator, savePath, baselinePath, steps) {
+  const currentPath = await takeScreenshot(url, locator, savePath, steps);
   const result = await compareImages(baselinePath, currentPath);
   if (result.escalatedToAi === true) {
     const normalizedIssues = normalizeSeverities(result.issues);

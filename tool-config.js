@@ -9,7 +9,8 @@ const toolConfiguration = {
 // true = use the fake mock AI response (no API call, no cost). false = real AI call (needs API key in .env, may incur cost)
   mockFlag: false,
 // The AI model the analysis request is sent to
-  model: "claude-sonnet-4-6"
+  // model: "claude-sonnet-4-6"
+  model: "claude-opus-4-6"
 }
 
 module.exports = {toolConfiguration};
