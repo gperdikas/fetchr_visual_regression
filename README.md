@@ -2,6 +2,10 @@
 Selectively AI-powered visual regression testing
 
 
+## Status
+Beta - There are limitation related to same-dimension images comparison and auto-deletion of test-related data, after test is complete.
+
+
 ## The Problem / Why This Exists
 Visual regression testing is tedious, time-consuming, and demands constant attention to detail.
 Existing automation tools can help, speeding up things but their deterministic approach detects that something changed, but not how much it matters, and flags any change past a pre-set threshold, which might raise false alarms when no real defects exist.
@@ -11,19 +15,22 @@ It scans every case and only calls AI when there's something real to judge.
 
 
 ## Features
-- Takes screenshots of given items on given pages
-- Generates baseline images using the same capture path as current screenshots, guaranteeing pixel-comparable references
-- Saves screenshots accordingly (baseline or current-state)
-- Compares the two screenshots referring to the same item using deterministic code (scanning by pixel)
-- Escalates to AI judgement if pixel difference is over the given threshold
-- Receives a structured JSON array of issues from the AI
-- Normalizes severity casing to canonical form (Critical/Major/Minor) withour altering meaning.
+- Takes screenshots of given items on given pages.
+- Generates baseline images using the same capture path as current screenshots, guaranteeing pixel-comparable references.
+- Saves screenshots accordingly (baseline or current-state).
+- Compares the two screenshots referring to the same item using deterministic code (scanning by pixel).
+- Escalates to AI judgement if pixel difference is over the given threshold.
+- Receives a structured JSON array of issues from the AI.
+- Normalizes severity casing to canonical form (Critical/Major/Minor) without altering meaning.
 - Validates each issue's structure and severity, rejecting malformed AI output before risk calculation.
-- Calculates risk level, given issues' severity, as judged by AI
+- Calculates risk level, given issues' severity, as judged by AI.
+- Returns no issues if AI does not find any, even if it is triggered by pixel-to-pixel comparison.
+- Saves each test's results and create results' report when whole test set runs.
 
 
 ## How It Works
-Take screenshots -> Compare -> AI analysis (if needed) -> Normalize results -> Validate results -> Risk calculation
+Take screenshots -> Compare -> AI analysis (if needed) -> Normalize results -> Validate results -> Risk calculation -> Report tests' results and issues found.
+
 Baselines are generated with the same screenshot function the tool uses for current shots (via src/create-baseline.js), so the two are always captured identically and comparable. Baselines are saved as test-data/designs/baseline-<item>.png.
 
 
@@ -79,17 +86,25 @@ The tool screenshots the example page, compares it against the baseline, and —
 
 
 ## Example / Demo
-![FetchR terminal output: detected difference, Major issue, MEDIUM risk](assets/demo-output.png)
-Running FetchR against a page where the header color changed from blue to black. It detects the difference, flags it as a Major issue and scores overall risk as MEDIUM.
+![FetchR terminal output: Reports detected differences, Lists issues, Shows calculated risk level](assets/fetchr_output_beta.png)
+Running four tests with FetchR against two items where the first has no differences between baseline and 'current', while the second has visible differences. FetchR detects these issues (2 Critical, 1 Major, 1 Minor) and creates a report with their severity level and description. Pixelmatch says images differ, while FetchR says 'how much this matters'.
 
+
+## Known limitations
+As is FetchR :
+- Supports only same-dimension image comparison.
+- Very small geometric differences might pass AI review.
+- Screenshots and results saved during the test run are not getting deleted automatically after test runs (fetchr-results & test-data/screenshots). User has to do it manually.
 
 ## Roadmap
 
 ### v1.0.0 (next)
-- Data-driven multi-case testing — run against a list of pages instead of one hardcoded case
-- User-supplied URLs: point the tool at your own staging and target environments
 - Clearer errors when the test server isn't serving the expected page
-- Basic result reporting
+- Able to compare images with similar dimensions (two parts: crop/pad so pixelmatch runs, and decide how AI treats the resulting position shifts)
+- Auto deletion of test data, after test cycle is complete 
+- Saving report in MD format
+- Improve filing system (pages) 
+- Add 'fetchr-results' & 'test-data/screenshots' on .gitignore
 
 ### Between v1 and v2
 - Robust file paths (independent of where the tool is run from)
@@ -99,7 +114,7 @@ Running FetchR against a page where the header color changed from blue to black.
 ### v2 and beyond
 - Compare directly against design files (e.g. Figma) as the baseline source
 - Optional local AI backend (Ollama) to run analysis without an external API
-- Proper test reporting / dashboard output
+- Dashboard output instead of terminal report
 
 
 ## License

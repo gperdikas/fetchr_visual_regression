@@ -3,8 +3,6 @@ const {compareImages} = require('./compare-images.js');
 const {calculateRiskLevel} = require('./risk-level.js');
 const {normalizeSeverities} = require('./normalize-severity.js');
 const {validateIssues} = require('./response-validator.js');
-// const baselinePath = "test-data/designs/baseline-craete-user-form.png";
-// const currentPath = "test-data/screenshots/create-user-form.png";
 let riskResult ;
 
 async function runTool(url, locator, savePath, baselinePath, steps) {
