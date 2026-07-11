@@ -98,23 +98,21 @@ As is FetchR :
 
 ## Roadmap
 
-### v1.0.0 (next)
-- Clearer errors when the test server isn't serving the expected page
-- Able to compare images with similar dimensions (two parts: crop/pad so pixelmatch runs, and decide how AI treats the resulting position shifts)
-- Auto deletion of test data, after test cycle is complete 
-- Saving report in MD format
+### Next up
 - Improve filing system (pages) 
-- Add 'fetchr-results' & 'test-data/screenshots' on .gitignore
+- Auto deletion of test data
+- Add 'fetchr-results' & 'test-data/screenshots' on .gitignore 
 
-### Between v1 and v2
-- Robust file paths (independent of where the tool is run from)
-- Move large AI prompts into separate files for easier editing
-- An "abstain / needs human review" tier when the AI isn't confident
+### Planned
+- Saving report in MD format 
+- Compare images with similar dimensions 
+- Move large AI prompts into separate files for easier editing 
+- Clearer errors 
 
-### v2 and beyond
-- Compare directly against design files (e.g. Figma) as the baseline source
-- Optional local AI backend (Ollama) to run analysis without an external API
-- Dashboard output instead of terminal report
+### Later
+- An "abstain / needs human review" tier
+- Optional local AI backend (Ollama)
+- Compare directly against design files (e.g. Figma) 
 
 
 ## License
