@@ -7,8 +7,9 @@ todo.txt
 scratch/
 
 # Test outputs and diffs
-/test-data/diffs/
-*.png.diff
+/fetchr-results/
+/screenshots/current/
+/screenshots/diff/
 
 # Playwright
 node_modules/
