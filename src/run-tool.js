@@ -1,11 +1,9 @@
-async function takeScreenshot(recipeName) {
-    console.log(`This should take a screenshot of ${recipeName}`);
-    return 'screenshots/current/fake.png'
-}
+const {takeScreenshot} = require('./take-screenshot.js');
+const {compareImages} = require('./compare-images.js');
 
 async function main() {
-    const path = await takeScreenshot('login-form');
-    console.log('got:', path);
+    const currentPath = await takeScreenshot('login-form');
+    const diff = await compareImages('screenshots/baseline/login-form.png', currentPath);
+    console.log('diff:', diff);
 }
-
 main();
